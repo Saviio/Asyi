@@ -95,7 +95,7 @@ The Method aboved that support add function and config to control error handling
 
 	} 
 
-	    //or
+	    //or, Asyi also support parameter as string without callback setting
 
 	data='name=Saviio&city=Shanghai'
 
