@@ -51,7 +51,7 @@ Reference : *Cat.chen* Blog
 
 ```
 
-The Method aboved that support add function and config to control error handling and timeout handling
+The Method above that support add function and config to control error handling and timeout handling
 
 ```
 	asyi.timeOut = 10000
