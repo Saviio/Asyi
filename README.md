@@ -17,6 +17,7 @@ Reference : *Cat.chen* Blog
 
 ## Method
 
+
 * GET
 
 ```
@@ -28,6 +29,7 @@ Reference : *Cat.chen* Blog
 
 	})
 ```
+
 
 * POST
 
@@ -108,6 +110,7 @@ The Method aboved that support add function and config to control error handling
 
 ```
 Note: The default JSONP callback method's name of Asyi Framework is ` callback `
+
 
 
 * stringify
