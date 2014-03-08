@@ -249,6 +249,10 @@ var Asyi=function () {
 
 														delete data["callback"]
 
+													} else {
+
+														data[cbName] = callbackMethod
+
 													}
 
 													src.value = url+'?'+self.stringify(data);break;
@@ -292,6 +296,9 @@ var Asyi=function () {
 	}
 
 }
+
+// TODO：
+// 	  fix:第二次请求依旧回replay上次的结果的bug
 
 
 

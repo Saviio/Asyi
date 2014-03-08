@@ -18,8 +18,15 @@ server = http.createServer(function (req, res) {
 	}
 
 	console.log(request)
+	var _request={}
 
-	res.end(request["callback"]+"({'key':'value'})");
+	for(var i in request){
+		if(i!=='callback'){
+			_request[i]=request[i]
+		}
+	}
+
+	res.end(request["callback"]+"("+JSON.stringify(_request)+")");
 
 })
 
