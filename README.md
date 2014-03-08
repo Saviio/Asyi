@@ -85,7 +85,7 @@ The Method aboved that support add function and config to control error handling
 
 		})
 
-	// If you want to get a AJAX operation with parameter
+	// If you want to get a AJAX operation with parameter, you need create a object like this :
 
 	data={
 
