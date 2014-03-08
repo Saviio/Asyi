@@ -3,7 +3,7 @@ Asyi
 
 A lightweight XMLHttpRequest Framework that designed to simplify the data interaction of web 
 
-reference:cat.chen blog
+Reference : *Cat.chen* Blog
 
 
 
@@ -11,9 +11,9 @@ reference:cat.chen blog
 
 * Common method such as `GET`,`POST`
 * JSONP method 
-* XML data parse to JavaScript Object     `unrealized`
+* Parse XML data to JavaScript Object     `unrealized`
 * Easier way to add operation callback method
-* Allow cascade connection
+* Support Cascading
 
 ## Method
 
@@ -83,17 +83,17 @@ The Method aboved that support add function and config to control error handling
 
 		})
 
-	// If you get a AJAX operation with parameter
+	// If you want to get a AJAX operation with parameter
 
 	data={
 
 		name : 'Saviio',
 		city : 'Shanghai',
-		callback : 'cb'  // The default JSONP callback method's name of Asyi Framework is `callback`
+		callback : 'cb'  
 
 	} 
 
-	or
+	    //or
 
 	data='name=Saviio&city=Shanghai'
 
@@ -106,7 +106,30 @@ The Method aboved that support add function and config to control error handling
 		})
 
 
-```	
+```
+Note: The default JSONP callback method's name of Asyi Framework is ` callback `
+
+
+* stringify
+
+```
+	
+	formData={
+		
+		name : 'Saviio',
+		city : 'Shanghai'
+
+	}	
+
+	var asyi=new Asyi()
+
+	asyi.stringify(formData) 
+
+		//return 'name=Saviio&city=Shanghai'
+
+
+
+```
 
 
 ## License
