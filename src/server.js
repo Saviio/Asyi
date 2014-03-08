@@ -1,4 +1,6 @@
 
+//
+// This server should run with node.js
 
 var http = require('http');
 var url = require("url");
