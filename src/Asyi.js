@@ -281,7 +281,8 @@ var Asyi=function () {
 			}
 		}
 
-		segment=new Node(url)
+		var segment = new Node(url)
+		
 		segment.add()
 
 
