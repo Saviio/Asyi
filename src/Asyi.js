@@ -269,6 +269,7 @@ var Asyi=function () {
 
 					this.node=scriptNode
 					body.appendChild(scriptNode)
+					self.completed=false;
 
 			}
 
@@ -297,8 +298,7 @@ var Asyi=function () {
 
 }
 
-// TODO：
-// 	  fix:第二次请求依旧回replay上次的结果的bug
+
 
 
 
