@@ -12,7 +12,7 @@ Reference : *Cat.chen* Blog
 * Common method such as `GET`,`POST`
 * JSONP method 
 * Parse XML data to JavaScript Object     `unrealized`
-* Easier way to add operation callback method
+* Easier way to add callback method
 * Support Cascading
 
 ## Method
