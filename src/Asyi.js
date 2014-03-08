@@ -14,6 +14,8 @@
 
 var Asyi=function () {
 
+
+
 	var 
 		callbackQueue = [],
 		errorQueue    = []
@@ -24,7 +26,7 @@ var Asyi=function () {
 	this.state     = "running"
 	this.completed = false
 	this.timeOut   = 10000
-	this.useJQuery = null
+	this.usejQuery = null
 	this.Default   = false
 
 
@@ -68,7 +70,7 @@ var Asyi=function () {
 
 		if(!window.jQuery || (self.Default == false)){
 
-			self.useJQuery = false
+			self.usejQuery = false
 			var xhr        = null;
 
 			if( window.XMLHttpRequest ){
@@ -106,7 +108,7 @@ var Asyi=function () {
 
 			$.ajaxSetup({ cache: false }); 
 
-			self.useJQuery = true
+			self.usejQuery = true
 			data           = data || null
 			dataType       = dataType || 'jsonp' 
 
