@@ -1,6 +1,6 @@
 
 //
-// This server should run with node.js
+// This server should be run with node.js
 
 var http = require('http');
 var url = require("url");
