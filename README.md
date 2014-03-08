@@ -23,9 +23,9 @@ Reference : *Cat.chen* Blog
 ```
 	var asyi=new Asyi()
 
-	asyi.goto(url).callback(function(){
+	asyi.goto(url).callback(function(data){
 
-		// TODO
+		// TODO 
 
 	})
 ```
@@ -43,7 +43,7 @@ Reference : *Cat.chen* Blog
 
 	var asyi=new Asyi()
 
-	asyi.goto('POST',url,form).callback(function(){
+	asyi.goto('POST',url,form).callback(function(data){
 		
 		//TODO
 
