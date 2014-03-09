@@ -12,160 +12,345 @@
  */
 
 
-var Asyi=function () {
+var Asyi=function () { //config cache
 
+	var pointer = this;
 
-
-	var 
-		callbackQueue = [],
-		errorQueue    = []
-		
-		
-	
-	this.result    = undefined
-	this.state     = "running"
-	this.completed = false
-	this.timeOut   = 10000
-	this.usejQuery = null
-	this.Default   = false
-
-
-	this.goto=function(type,url,data,dataType){
-		
-
-		data = data || null
-		args = [].slice.call(arguments)
-
-		if(args.length==1) {
-
-			url  = type;
-			type = 'GET'
-
-		}
-
-		if(Object.prototype.toString.call(data)=='[object Object]')data=this.stringify(data)
+	var AJAX=function(){
 
 		var 
-		    self     = this,
-		    _timeOut = null
+			callbackQueue = [],
+			errorQueue    = []
+			
+			
+		
+		this.result    = undefined
+		this.state     = "running"
+		this.completed = false
+		this.timeOut   = 10000
+		this.usejQuery = null
+		this.Default   = false
 
-		self.completed=false;
 
-		function abortTimeOut(xhr,time) {
+		this.goto=function(type,url,data,dataType){
+			
 
-			if ( xhr.timeout ){
+			data = data || null
+			args = [].slice.call(arguments)
 
-				xhr.timeout = time
+			if(args.length==1) {
 
-			} else {
-
-				_timeOut = setTimeout(function() {
-
-					xhr.abort()
-
-				},time)
-			}
-
-		}
-
-		if(!window.jQuery || (self.Default == false)){
-
-			self.usejQuery = false
-			var xhr        = null;
-
-			if( window.XMLHttpRequest ){
-
-				xhr = new XMLHttpRequest()
-
-			}else if(window.ActiveXObject){
-
-				xhr = new ActiveXObject("Microsoft.XMLHTTP")
+				url  = type;
+				type = 'GET'
 
 			}
 
-			xhr.open(type,url,true)
-			abortTimeOut(xhr,this.timeOut)
+			if(Object.prototype.toString.call(data)=='[object Object]')data = pointer.stringify(data)
 
-			xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
-			xhr.onreadystatechange = function() {
+			var 
+			    self     = this,
+			    _timeOut = null
 
-				if (xhr.readyState == 4 && xhr.status == 200 ){	
+			self.completed=false;
 
-					if(_timeOut !== null) clearTimeout(_timeOut);
-					self.yield(xhr.responseText);
+			function abortTimeOut(xhr,time) {
+
+				if ( xhr.timeout ){
+
+					xhr.timeout = time
 
 				} else {
 
-					self.extra()
+					_timeOut = setTimeout(function() {
 
+						xhr.abort()
+
+					},time)
 				}
 
 			}
 
-			xhr.send(data)
+			function createXHR(){
 
-		} else { // Asyi的jQuery Ajax引用还待测试，可能存在不期待的异常
+				var _xhr
 
-			$.ajaxSetup({ cache: false }); 
+				if( window.XMLHttpRequest ){
+					_xhr = new XMLHttpRequest()
 
-			self.usejQuery = true
-			data           = data || null
-			dataType       = dataType || 'jsonp' 
+				}else if(window.ActiveXObject){
+					_xhr = new ActiveXObject("Microsoft.XMLHTTP")
 
-			$.ajax({ 
+				} else {
+					_xhr = null
+					throw "Your browser do not support AJAX"
 
-			  url: url,
-			  data: data,
-			  success: function(result) {  
+				}	
+				return _xhr		
 
-				self.yield(result); 
+			}
 
-			  },
-			  dataType: dataType
+			if(!window.jQuery || (self.Default == false)){
 
-			});
+				self.usejQuery = false
+				var xhr        = null;
+
+				xhr=createXHR()
+
+				xhr.open(type,url,true)
+				abortTimeOut(xhr,this.timeOut)
+
+				xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded')
+				xhr.onreadystatechange = function() {
+
+					if (xhr.readyState == 4 && xhr.status == 200 ){	
+
+						if(_timeOut !== null) clearTimeout(_timeOut);
+						self.yield(xhr.responseText);
+
+					} else {
+
+						self.extra()
+
+					}
+
+				}
+
+				xhr.send(data)
+
+			} else { // Asyi的jQuery Ajax引用还待测试，可能存在不期待的异常
+
+				$.ajaxSetup({ cache: false }); 
+
+				self.usejQuery = true
+				data           = data || null
+				dataType       = dataType || 'jsonp' 
+
+				$.ajax({ 
+
+				  url: url,
+				  data: data,
+				  success: function(result) {  
+
+					self.yield(result); 
+
+				  },
+				  dataType: dataType
+
+				});
+
+			}
+
+			return self;
+		}
+
+
+
+	    this.yield = function(result) { 
+
+	        var self = this;
+
+	        setTimeout(function() {
+
+	            self.result    = result;
+	            self.state     = "completed";
+	            self.completed = true;
+
+	            while (callbackQueue.length > 0) {
+
+	                var callback = callbackQueue.shift();
+	                callback(self.result);
+
+	            }
+
+	        }, 1);
+
+	        return this;
+	    };
+
+		this.callback = function(callback) { 
+
+			callbackQueue.push(callback);
+
+			if (this.completed) {
+
+				this.yield(this.result);
+
+			}
+
+			return this;
+		};
+
+
+		this.error=function(callback){
+
+			errorQueue.push(callback);
+			return this;
 
 		}
 
-		return self;
+		this.extra=function(){
+
+			var self = this;
+
+		    setTimeout(function() {
+
+	            self.result    = null;
+	            self.state     = "error";
+	            self.completed = false;
+
+	            while (errorQueue.length > 0) {
+
+	                var callback = errorQueue.shift();
+	                callback();
+
+	            }
+	        }, 1); 
+
+	        return this
+
+		}
+
+		this.io=function(url,data){ //JSON with Padding method 
+
+			var cbName='callback';
+
+			var 
+				self           = this,
+				timestamp      = new Date().getTime(),
+				rand           = Math.random().toString().substr(2);
+				callbackMethod = 'Asyi'+timestamp+'_'+rand
+
+			var Node=function(url){
+
+				this.add=function(){
+
+					var 
+						body       = document.getElementsByTagName('body')[0],
+						scriptNode = document.createElement("script"),
+						src        = document.createAttribute("src"),
+						id         = document.createAttribute("id")
+
+						switch(Object.prototype.toString.call(data)){
+
+							case '[object Object]' : 
+														if(data["callback"] !== undefined ){
+
+															var _name   = data["callback"]
+															data[_name] = callbackMethod
+
+															delete data["callback"]
+
+														} else {
+
+															data[cbName] = callbackMethod
+
+														}
+
+														src.value = url+'?'+pointer.stringify(data);break;
+
+							case '[object String]' : src.value = url+'?'+data+'&'+cbName+'='+callbackMethod;break;
+							default : src.value = url+'?'+cbName+'='+callbackMethod;break;
+
+						}
+
+						this.id   = id.value = "Asyi-"+timestamp
+
+						scriptNode.setAttributeNode(src)
+						scriptNode.setAttributeNode(id)				
+
+						this.node=scriptNode
+						body.appendChild(scriptNode)
+						self.completed=false;
+
+						this.registerHandle(callbackMethod)
+
+				}
+
+				this.remove=function(method){
+
+					this.node.remove()
+					delete window[method]
+
+				}
+
+				this.registerHandle=function(cbm){
+
+					window[cbm]=function(data){
+
+						self.yield(data)
+						setTimeout(function(){
+
+							segment.remove(cbm)
+
+						},0)
+
+					}
+				}
+			}
+
+			var segment = new Node(url)
+			
+			segment.add()
+
+
+
+
+			return self
+
+		}
+
+
+		/*  可配置模块,考虑设计可行性中
+
+		if (config) {
+			var _this=this
+
+			if(Object.prototype.toString.call(config)!=='[object Object]'){
+
+				throw 'Asyi config only support a Object'
+
+			} else {
+
+				if(!config.path){
+
+					throw 'Prototype:Path is null'
+
+				} 
+
+				var path=config.path
+
+				path='http://localhost:8081/xml.json'
+
+				var loadFile=createXHR()
+				loadFile.onreadystatechange=function(){
+
+					if (loadFile.readyState == 4  ){	
+						
+							var _funcValue=loadFile.responseText
+							_this.xml=eval("obj="+_funcValue).xml //考虑成 json2.js , 暂时使用eval
+						
+					}
+
+				}
+				loadFile.open('GET',path,true)
+				loadFile.send(null)
+			}
+
+		}
+		*/
 	}
 
+	this.io=function(url,data){
 
+		var ajax=new AJAX()
+		return ajax.io(url,data)
+	}
 
-    this.yield = function(result) { 
+	this.goto=function(type,url,data,dataType){
 
-        var self = this;
-
-        setTimeout(function() {
-
-            self.result    = result;
-            self.state     = "completed";
-            self.completed = true;
-
-            while (callbackQueue.length > 0) {
-
-                var callback = callbackQueue.shift();
-                callback(self.result);
-
-            }
-
-        }, 1);
-
-        return this;
-    };
-
-	this.callback = function(callback) { 
-
-		callbackQueue.push(callback);
-
-		if (this.completed) {
-
-			this.yield(this.result);
-
-		}
-
-		return this;
-	};
+		var ajax=new AJAX()
+		return ajax.goto(type,url,data,dataType)
+	}
 
 	this.stringify = function(obj) { 
 
@@ -176,7 +361,6 @@ var Asyi=function () {
 
 
 		for (key in obj){
-
 			str+=key+'='+obj[key]+'&'
 			prop++
 
@@ -185,7 +369,6 @@ var Asyi=function () {
 		if(prop===0){
 
 			return ''
-
 		}
 
 		str = str.slice(0,-1)
@@ -193,113 +376,10 @@ var Asyi=function () {
 		return str
 	}
 
-	this.error=function(callback){
-
-		errorQueue.push(callback);
-		return this;
-
-	}
-
-	this.extra=function(){
-
-		var self = this;
-
-	    setTimeout(function() {
-
-            self.result    = null;
-            self.state     = "error";
-            self.completed = false;
-
-            while (errorQueue.length > 0) {
-
-                var callback = errorQueue.shift();
-                callback();
-
-            }
-        }, 1); 
-
-        return this
-
-	}
-
-	this.io=function(url,data){ //JSON with Padding method 
-
-		var cbName='callback';
-
-		var 
-			self           = this,
-			timestamp      = new Date().getTime(),
-			callbackMethod = 'Asyi'+timestamp
-
-		var Node=function(url){
-
-			this.add=function(){
-
-				var 
-					body       = document.getElementsByTagName('body')[0],
-					scriptNode = document.createElement("script"),
-					src        = document.createAttribute("src"),
-					id         = document.createAttribute("id")
-
-					switch(Object.prototype.toString.call(data)){
-
-						case '[object Object]' : 
-													if(data["callback"] !== undefined ){
-
-														var _name   = data["callback"]
-														data[_name] = callbackMethod
-
-														delete data["callback"]
-
-													} else {
-
-														data[cbName] = callbackMethod
-
-													}
-
-													src.value = url+'?'+self.stringify(data);break;
-
-						case '[object String]' : src.value = url+'?'+data+'&'+cbName+'='+callbackMethod;break;
-						default : src.value = url+'?'+cbName+'='+callbackMethod;break;
-
-					}
-
-					this.id   = id.value = "Asyi-"+timestamp
-
-					scriptNode.setAttributeNode(src)
-					scriptNode.setAttributeNode(id)				
-
-					this.node=scriptNode
-					body.appendChild(scriptNode)
-					self.completed=false;
-
-			}
-
-			this.remove=function(method){
-
-				this.node.remove()
-				delete window[method]
-
-			}
-		}
-
-		var segment = new Node(url)
-		
-		segment.add()
-
-
-		window[callbackMethod]=function(data){
-
-			self.yield(data)
-			setTimeout(segment.remove(callbackMethod),0)
-
-		}
-
-		return self
-
-	}
 
 }
+
+asyi=new Asyi()
 
 
 
