@@ -140,7 +140,8 @@ Note: The default JSONP callback method's name of Asyi Framework is ` callback `
 ```
 
 	xml_sample = '<?xml version="1.0" encoding="ISO-8859-1"?>'
-	            +'<!--Copyright w3school.com.cn --><!-- W3School.com.cn bookstore example -->'
+	            +'<!--Copyright w3school.com.cn -->
+	            +'<!-- W3School.com.cn bookstore example -->'
 	            +'<bookstore>'
 		            +'<book category="children">'
 			            +'<title lang="en">Harry Potter</title>'
