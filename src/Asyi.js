@@ -41,7 +41,7 @@ var Asyi=function () { //config cache
 			if(args.length==1) {
 
 				url  = type;
-				type = 'GET'
+				type = 'Get'
 
 			}
 
