@@ -41,7 +41,7 @@ var Asyi=function () { //config cache
 			if(args.length==1) {
 
 				url  = type;
-				type = 'Get'
+				type = 'GET'
 
 			}
 
@@ -342,14 +342,20 @@ var Asyi=function () { //config cache
 
 	this.io=function(url,data){
 
-		var ajax=new AJAX()
-		return ajax.io(url,data)
+		var 
+			ajax = new AJAX(),
+			args  = [].slice.call(arguments)
+		
+		return ajax.io.apply(ajax,args)
 	}
 
 	this.goto=function(type,url,data,dataType){
 
-		var ajax=new AJAX()
-		return ajax.goto(type,url,data,dataType)
+		var 
+			ajax = new AJAX(),
+			args  = [].slice.call(arguments)
+
+		return ajax.goto.apply(ajax,args)
 	}
 
 	this.stringify = function(obj) { 
