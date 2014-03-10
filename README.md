@@ -9,7 +9,7 @@ Reference : *Cat.chen* Blog
 
 ## Features
 
-* Common method such as `GET`,`POST`
+* Standard method for HTTP like `GET`,`POST`
 * JSONP method 
 * Parse XML data to JavaScript Object     `unrealized`
 * Easier way to add callback method
