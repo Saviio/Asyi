@@ -375,8 +375,91 @@ var Asyi=function () { //config cache
 
 		return str
 	}
+	
+	this.xml = function(xml) {
+		
+		function loadXML(xmlDocument){ 
 
+			var xmlDoc=null;
+			if (window.ActiveXObject) {
+				xmlDoc = new ActiveXObject('Microsoft.XMLDOM');
+				xmlDoc.async = false;
+				xmlDoc.load(xmlDocument);
+			} else if (DOMParser) {
 
+				xmlDoc = new DOMParser().parseFromString(xmlDocument, "text/xml");
+
+			} else {
+				throw "Your Browser does not support xml parse"
+				return null;
+			}
+			
+			return xmlDoc;
+		}
+			
+		var 
+		xmlDoc=loadXML(xml),
+		//xmlDoc=new DOMParser().parseFromString(a, "text/xml"),
+		root=xmlDoc.documentElement,
+		childNodeList=root.childNodes;
+		
+		function createObj(arr,origin){
+		
+			var obj=origin||{}
+		
+			for(var i=0;i<arr.length;i++){
+		
+				var thisNode=arr[i]
+				if(thisNode.nodeName!=='#text'){
+		
+					if(obj[thisNode.nodeName]!==undefined){
+						if(Object.prototype.toString.call(obj[thisNode.nodeName])!=='[object Array]'){
+		
+							var _preNode=obj[thisNode.nodeName]
+							obj[thisNode.nodeName]=[]
+							obj[thisNode.nodeName].push(_preNode)
+						}
+					} else {
+						obj[thisNode.nodeName]=null
+					}			
+				}
+		
+				var 
+					attrList = thisNode.attributes,
+					attr     = null
+		
+				if(attrList!==undefined){
+					
+					attr={}
+					for (var k =0;k<attrList.length;k++){
+						attr[attrList[k].localName]=thisNode.getAttribute(attrList[k].localName)
+					}
+				}					
+		
+				var hasChild=null
+				thisNode.childNodes.length ? hasChild=true : hasChild=false
+		
+				if(hasChild){
+		
+					if(Object.prototype.toString.call(obj[thisNode.nodeName])!=='[object Array]'){
+						obj[thisNode.nodeName]=createObj(thisNode.childNodes,attr)
+					} else {
+						obj[thisNode.nodeName].push(createObj(thisNode.childNodes,attr))
+					}			
+				} else {
+		
+					if(thisNode.textContent!==""){
+						obj["text"]=thisNode.textContent
+					}
+				}
+			}
+		
+			return obj
+		}
+			
+		var xmlObj=createObj(childNodeList)
+		return xmlObj
+	}
 }
 
 asyi=new Asyi()
