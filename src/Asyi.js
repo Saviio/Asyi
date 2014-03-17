@@ -358,29 +358,24 @@ var Asyi=function () { //config cache
 		return ajax.goto.apply(ajax,args)
 	}
 
-	this.stringify = function(obj) { 
-
-		var 
-			str = '',
-			key,
-			prop=0
-
-
-		for (key in obj){
-			str+=key+'='+obj[key]+'&'
-			prop++
-
-		}
-
-		if(prop===0){
-
-			return ''
-		}
-
-		str = str.slice(0,-1)
-
-		return str
-	}
+	this.stringify = function(obj,parent){
+		
+            parent=parent||''
+            var query=''
+            
+            for(var i in obj){
+            	sub=''
+            	if(obj.hasOwnProperty(i)){
+            		var sub = ( parent =='' ? i : parent+'.'+i )
+            		if(Object.prototype.toString.call(obj[i])=='[object Object]'){
+            			query+=createQuery(obj[i],sub)+'&'
+            		} else {
+            			query+=sub+'='+obj[i]+'&'
+            		}
+            	}
+            }
+            return query.slice(0,-1).replace(' ','%20')
+        }
 	
 	this.xml = function(xml) {
 		
