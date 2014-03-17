@@ -359,7 +359,7 @@ var Asyi=function () { //config cache
 	}
 
 	this.stringify = function(obj,parent){
-		
+
             parent=parent||''
             var query=''
             
@@ -374,6 +374,7 @@ var Asyi=function () { //config cache
             		}
             	}
             }
+            
             return query.slice(0,-1).replace(' ','%20')
         }
 	
