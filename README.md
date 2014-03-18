@@ -11,7 +11,7 @@ Reference : *Cat.chen* Blog
 
 * Standard method for HTTP like `GET`,`POST`
 * JSONP method 
-* Parse XML data to JavaScript Object     `realized , but maybe it need some review`
+* Parse XML data to JavaScript Object     `realized , but maybe need some review`
 * Easier way to add callback method
 * Support Cascading
 
