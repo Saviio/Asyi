@@ -47,7 +47,7 @@ var Asyi=function () { //config cache
 
 			}
 
-			if(Object.prototype.toString.call(data)=='[object Object]')data = pointer.stringify(data)
+			if(Object.prototype.toString.call(data)=='[object Object]')data = pointer.serialize(data)
 
 			var 
 			    self     = this,
@@ -248,7 +248,7 @@ var Asyi=function () { //config cache
 
 														}
 
-														src.value = url+'?'+pointer.stringify(data);break;
+														src.value = url+'?'+pointer.serialize(data);break;
 
 							case '[object String]' : src.value = url+'?'+data+'&'+cbName+'='+callbackMethod;break;
 							default : src.value = url+'?'+cbName+'='+callbackMethod;break;
@@ -360,7 +360,7 @@ var Asyi=function () { //config cache
 		return ajax.goto.apply(ajax,args)
 	}
 
-	this.stringify = function(obj,parent){
+	this.serialize = function(obj,parent){
 
 			var 
 				query  = []
@@ -372,9 +372,9 @@ var Asyi=function () { //config cache
             	if(obj.hasOwnProperty(i)){
             		var sub = ( parent =='' ? i : parent+'.'+i )
             		if(Object.prototype.toString.call(obj[i])=='[object Object]'){
-            			query.push(pointer.stringify(obj[i],sub))
+            			query.push(pointer.serialize(obj[i],sub))
             		} else {
-            			query.push(sub+'='+encodeURIComponent(obj[i]))
+            			query.push(encodeURIComponent(sub)+'='+encodeURIComponent(obj[i]))
             		}
             	}
             }
