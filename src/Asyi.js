@@ -14,7 +14,9 @@
 
 var Asyi=function () { //config cache
 
-	var pointer = this;
+	var 
+		 pointer = this;
+		, win    = this || (0, eval)('this')
 
 	var AJAX=function(){
 
@@ -368,7 +370,7 @@ var Asyi=function () { //config cache
             	if(obj.hasOwnProperty(i)){
             		var sub = ( parent =='' ? i : parent+'.'+i )
             		if(Object.prototype.toString.call(obj[i])=='[object Object]'){
-            			query+=createQuery(obj[i],sub)+'&'
+            			query+=pointer.stringify(obj[i],sub)+'&'
             		} else {
             			query+=sub+'='+obj[i]+'&'
             		}
@@ -376,7 +378,7 @@ var Asyi=function () { //config cache
             }
             
             return query.slice(0,-1).replace(' ','%20')
-        }
+    }
 	
 	this.xml = function(xml) {
 		
@@ -461,6 +463,35 @@ var Asyi=function () { //config cache
 			
 		var xmlObj=createObj(childNodeList)
 		return xmlObj
+	}
+
+	this.form=function(obj){
+
+		var self=this
+		self.validation=[]
+		
+		for(var i in obj){
+			if(obj.hasOwnProperty(i)){
+				self.validation.push([i,obj[i]])
+			}
+		}
+
+	}
+
+	this.form.prototype.valid=function(){
+		var rules=this.validation
+
+		for(var i=0;i<rules.length;i++){
+
+			if(rules[i][1]==='required'){
+				if(!this[rules[i][0]]){
+					return false;
+				}
+			} 
+
+		}
+		
+		return true
 	}
 }
 
