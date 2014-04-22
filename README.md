@@ -113,7 +113,7 @@ Note: The default JSONP callback method's name of Asyi Framework is ` callback `
 
 
 
-* stringify
+* serialize
 
 ```
 	
@@ -126,7 +126,7 @@ Note: The default JSONP callback method's name of Asyi Framework is ` callback `
 
 	var asyi=new Asyi()
 
-	asyi.stringify(formData) 
+	asyi.serialize(formData) 
 
 		//return 'name=Saviio&city=Shanghai'
 
@@ -180,6 +180,23 @@ Note: The default JSONP callback method's name of Asyi Framework is ` callback `
 	*/
 
 	
+
+```
+
+*Form
+
+```
+
+//testing
+
+```
+
+*Socket
+
+```
+
+
+
 
 ```
 
