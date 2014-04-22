@@ -15,7 +15,7 @@
 var Asyi=function () { //config cache
 
 	var 
-		 pointer = this;
+		 pointer = this
 		, win    = this || (0, eval)('this')
 
 	var AJAX=function(){
@@ -345,7 +345,7 @@ var Asyi=function () { //config cache
 	this.io=function(url,data){
 
 		var 
-			ajax = new AJAX(),
+			ajax  = new AJAX(),
 			args  = [].slice.call(arguments)
 		
 		return ajax.io.apply(ajax,args)
@@ -354,7 +354,7 @@ var Asyi=function () { //config cache
 	this.goto=function(type,url,data,dataType){
 
 		var 
-			ajax = new AJAX(),
+			ajax  = new AJAX(),
 			args  = [].slice.call(arguments)
 
 		return ajax.goto.apply(ajax,args)
@@ -362,22 +362,24 @@ var Asyi=function () { //config cache
 
 	this.stringify = function(obj,parent){
 
-            parent=parent||''
-            var query=''
+			var 
+				query  = []
+				parent = parent || ''
+			
             
             for(var i in obj){
             	sub=''
             	if(obj.hasOwnProperty(i)){
             		var sub = ( parent =='' ? i : parent+'.'+i )
             		if(Object.prototype.toString.call(obj[i])=='[object Object]'){
-            			query+=pointer.stringify(obj[i],sub)+'&'
+            			query.push(pointer.stringify(obj[i],sub))
             		} else {
-            			query+=sub+'='+obj[i]+'&'
+            			query.push(sub+'='+encodeURIComponent(obj[i]))
             		}
             	}
             }
             
-            return query.slice(0,-1).replace(' ','%20')
+            return query.join('&')
     }
 	
 	this.xml = function(xml) {
@@ -468,18 +470,19 @@ var Asyi=function () { //config cache
 	this.form=function(obj){
 
 		var self=this
-		self.validation=[]
+		self.rules=[]
 		
 		for(var i in obj){
 			if(obj.hasOwnProperty(i)){
-				self.validation.push([i,obj[i]])
+				self.rules.push([i,obj[i]])
 			}
 		}
 
 	}
 
 	this.form.prototype.valid=function(){
-		var rules=this.validation
+
+		var rules=this.rules
 
 		for(var i=0;i<rules.length;i++){
 
@@ -487,15 +490,27 @@ var Asyi=function () { //config cache
 				if(!this[rules[i][0]]){
 					return false;
 				}
-			} 
-
+			} else if(Object.prototype.toString.call(rules[i][1])==='[object RegExp]'){
+				if(this[rules[i][0]]){
+					if(!String(this[rules[i][0]]).test(rules[i][1])){
+						return false;
+					}
+				}
+			}
 		}
-		
+
 		return true
+	}
+
+	this.socket=function(){
+
+		//todo
 	}
 }
 
 asyi=new Asyi()
+
+
 
 
 
