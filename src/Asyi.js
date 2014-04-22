@@ -467,7 +467,7 @@ var Asyi=function () { //config cache
 		return xmlObj
 	}
 
-	this.form=function(obj){
+	this.form=function(obj){//todo 自动补位optional
 
 		var 
 			self       = this;
@@ -488,7 +488,7 @@ var Asyi=function () { //config cache
 
 		for(var i=0;i<rules.length;i++){
 
-			if(rules[i][1]==='required'){
+			if(rules[i][1]==='required'){ //修改为[2]，同时提供optional，和正则
 				if(!this[rules[i][0]]){
 					return false;
 				}
