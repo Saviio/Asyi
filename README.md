@@ -183,7 +183,7 @@ Note: The default JSONP callback method's name of Asyi Framework is ` callback `
 
 ```
 
-*Form
+* Form
 
 ```
 
@@ -191,7 +191,7 @@ Note: The default JSONP callback method's name of Asyi Framework is ` callback `
 
 ```
 
-*Socket
+* Socket
 
 ```
 
