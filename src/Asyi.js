@@ -469,8 +469,11 @@ var Asyi=function () { //config cache
 
 	this.form=function(obj){
 
-		var self=this
-		self.rules=[]
+		var 
+			self       = this,
+			self.rules = [],
+			obj        = obj || {}
+
 		
 		for(var i in obj){
 			if(obj.hasOwnProperty(i)){
