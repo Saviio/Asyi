@@ -301,6 +301,52 @@ var Asyi=function () { //config cache
 
 		}
 
+		/* //streaming 實現仍然不穩定
+		this.Streaming=function(url,args,cbName,cb){
+
+			
+
+			var 
+				domFragment = document.createDocumentFragment(),
+				iframeNode  = document.createElement("iframe"),
+				src         = document.createAttribute("src"),
+				id          = document.createAttribute("id"),
+				rand        = Math.random().toString().substr(2),
+				style       = document.createAttribute('style'),
+				body        = window.document.getElementsByTagName('body')[0];
+
+			id.value="Asyi-iframe-"+rand;
+			style.value="height:0px;width:0px;display:none;"
+
+			iframeNode.setAttributeNode(src)
+			iframeNode.setAttributeNode(id)
+			iframeNode.setAttributeNode(style)
+
+
+			domFragment.appendChild(iframeNode);
+			body.appendChild(domFragment);
+
+
+			args=pointer.serialize(args)
+
+		    iframeNode.addEventListener( "load", function(){
+		      alert(1)
+		      this.removeEventListener( "load", arguments.call, false);
+		      this.contentWindow[cbName]=cb
+		   }, false);
+
+			iframeNode.src=url+args
+
+			setTimeout(function(){
+				if(iframeNode.contentWindow.document.readyState==="loading"||iframeNode.contentWindow.document.readyState==="complete"){
+					iframeNode.contentWindow[cbName]=cb
+				} else {
+					console.log(iframeNode.contentWindow.document.readyState)
+					setTimeout(arguments.callee,1000)
+				}
+				
+			},1000)
+		}*/
 
 		/*  可配置模块,考虑设计可行性中
 
