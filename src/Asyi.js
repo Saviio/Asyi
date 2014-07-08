@@ -12,7 +12,7 @@
  */
 
 
-var Asyi=function () { //config cache
+var Asyi=function () {
 
 	var 
 		 pointer = this
@@ -301,91 +301,6 @@ var Asyi=function () { //config cache
 
 		}
 
-		/* //streaming 實現仍然不穩定
-		this.Streaming=function(url,args,cbName,cb){
-
-			
-
-			var 
-				domFragment = document.createDocumentFragment(),
-				iframeNode  = document.createElement("iframe"),
-				src         = document.createAttribute("src"),
-				id          = document.createAttribute("id"),
-				rand        = Math.random().toString().substr(2),
-				style       = document.createAttribute('style'),
-				body        = window.document.getElementsByTagName('body')[0];
-
-			id.value="Asyi-iframe-"+rand;
-			style.value="height:0px;width:0px;display:none;"
-
-			iframeNode.setAttributeNode(src)
-			iframeNode.setAttributeNode(id)
-			iframeNode.setAttributeNode(style)
-
-
-			domFragment.appendChild(iframeNode);
-			body.appendChild(domFragment);
-
-
-			args=pointer.serialize(args)
-
-		    iframeNode.addEventListener( "load", function(){
-		      alert(1)
-		      this.removeEventListener( "load", arguments.call, false);
-		      this.contentWindow[cbName]=cb
-		   }, false);
-
-			iframeNode.src=url+args
-
-			setTimeout(function(){
-				if(iframeNode.contentWindow.document.readyState==="loading"||iframeNode.contentWindow.document.readyState==="complete"){
-					iframeNode.contentWindow[cbName]=cb
-				} else {
-					console.log(iframeNode.contentWindow.document.readyState)
-					setTimeout(arguments.callee,1000)
-				}
-				
-			},1000)
-		}*/
-
-		/*  可配置模块,考虑设计可行性中
-
-		if (config) {
-			var _this=this
-
-			if(Object.prototype.toString.call(config)!=='[object Object]'){
-
-				throw 'Asyi config only support a Object'
-
-			} else {
-
-				if(!config.path){
-
-					throw 'Prototype:Path is null'
-
-				} 
-
-				var path=config.path
-
-				path='http://localhost:8081/xml.json'
-
-				var loadFile=createXHR()
-				loadFile.onreadystatechange=function(){
-
-					if (loadFile.readyState == 4  ){	
-						
-							var _funcValue=loadFile.responseText
-							_this.xml=eval("obj="+_funcValue).xml //考虑成 json2.js , 暂时使用eval
-						
-					}
-
-				}
-				loadFile.open('GET',path,true)
-				loadFile.send(null)
-			}
-
-		}
-		*/
 	}
 
 	this.io=function(url,data){
@@ -451,7 +366,6 @@ var Asyi=function () { //config cache
 			
 		var 
 		xmlDoc=loadXML(xml),
-		//xmlDoc=new DOMParser().parseFromString(a, "text/xml"),
 		root=xmlDoc.documentElement,
 		childNodeList=root.childNodes;
 		
@@ -512,56 +426,7 @@ var Asyi=function () { //config cache
 		var xmlObj=createObj(childNodeList)
 		return xmlObj
 	}
-
-	this.form=function(obj){//todo 自动补位optional
-
-		var 
-			self       = this;
-			obj        = obj || {}
-			self.rules = []
-		
-		for(var i in obj){
-			if(obj.hasOwnProperty(i)){
-				self.rules.push([i,obj[i]])
-			}
-		}
-
-	}
-
-	this.form.prototype.valid=function(){
-
-		var rules=this.rules
-
-		for(var i=0;i<rules.length;i++){
-
-			if(rules[i][1]==='required'){ //修改为[2]，同时提供optional，和正则
-				if(!this[rules[i][0]]){
-					return false;
-				}
-			} else if(Object.prototype.toString.call(rules[i][1])==='[object RegExp]'){
-				if(this[rules[i][0]]){
-					if(!String(this[rules[i][0]]).test(rules[i][1])){
-						return false;
-					}
-				}
-			}
-		}
-
-		return true
-	}
-
-	this.socket=function(){
-
-		//todo
-	}
 }
 
 asyi=new Asyi()
-
-
-
-
-
-
-
 
