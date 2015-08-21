@@ -109,7 +109,7 @@ The Method above that support add function and config to control error handling 
 
 
 ```
-Note: The default JSONP callback method's name of Asyi Framework is ` callback `
+Note:  Default name of JSONP callback is ` callback `
 
 
 
