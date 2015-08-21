@@ -51,7 +51,7 @@ Reference : *Cat.chen* Blog
 
 ```
 
-The Method above that support add function and config to control error handling and timeout handling
+The Method aboved support that add function and config to control error handler and timeout handler
 
 ```
 	asyi.timeOut = 10000
@@ -203,7 +203,7 @@ Note:  Default name of JSONP callback is ` callback `
 
 ## License
 
-Asyi Framework's code uses the MIT license
+MIT license
 
 ## At Last
 
